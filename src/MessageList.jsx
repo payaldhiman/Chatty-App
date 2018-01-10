@@ -4,9 +4,10 @@ import Message from './Message.jsx';
 class MessageList extends Component {
   render() {
     // console.log("Rendering <MessageList />");
-
+    console.log("on messagelist",this.props.color);
 
     return (
+
 
       <main className="messages">
         {this.props.messages.map(message => (
@@ -14,7 +15,10 @@ class MessageList extends Component {
             key={message.id}
             username={message.username}
             content={message.content}
-            type={message.type} />
+            type={message.type}
+            color={message.color}
+            />
+
         ))}
 
       </main>

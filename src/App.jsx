@@ -10,7 +10,9 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: {name: "Bob"},
-      messages: []
+      messages: [],
+      activeUsers: 0,
+      color:'black'
     };
 
     this.addMessage = this.addMessage.bind(this);
@@ -20,21 +22,33 @@ class App extends Component {
   componentDidMount() {
     this.socket = new WebSocket("ws://localhost:3001");
     console.log("Connected to server");
-    this.socket.onmessage = (payload) => {
-      console.log('received message from web socket server:', payload.data);
+
+    this.socket.onmessage = (event) => {
+      console.log('received message from web socket server:', event.data);
       // Update your state
-      const newMessage = JSON.parse(payload.data);
-      const messages = this.state.messages.concat(newMessage);
-      this.setState({messages: messages});
+      console.log(event.data.length);
+
+
+      if (event.data.length === 1) {
+        const activeUsers = event.data;
+        this.setState({activeUsers: activeUsers});
+
+      } else {
+        const newMessage = JSON.parse(event.data);
+        const messages = this.state.messages.concat(newMessage);
+
+        console.log(newMessage.color);
+        this.setState({messages: messages});
+      }
 
     }
   }
 
   addMessage(content) {
     const newMessage = {
+      type:"message",
       username: this.state.currentUser.name,
-      content: content,
-      type:"message"
+      content: content
     };
     this.socket.send(JSON.stringify(newMessage));
   }
@@ -42,9 +56,9 @@ class App extends Component {
   newUsername(user) {
 
     const newUser = {
+      type: 'notification',
       oldUserName: this.state.currentUser.name,
-      newUserName: user,
-      type: 'notification'
+      newUserName: user
     }
     this.setState({ currentUser: {name: user}});
     this.socket.send(JSON.stringify(newUser));
@@ -56,6 +70,7 @@ class App extends Component {
      <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
+        <div>{this.state.activeUsers} users online</div>
       </nav>
       <MessageList messages={this.state.messages} />
       <ChatBar currentUser={this.state.currentUser}
