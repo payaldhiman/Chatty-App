@@ -4,7 +4,7 @@ import Message from './Message.jsx';
 class MessageList extends Component {
   render() {
     // console.log("Rendering <MessageList />");
-    console.log("on messagelist",this.props.color);
+    // console.log("on messagelist",this.props.color);
 
     return (
 

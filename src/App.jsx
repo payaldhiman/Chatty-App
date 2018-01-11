@@ -9,7 +9,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: {name: "Bob"},
+      currentUser: {name: "Anonymous"},
       messages: [],
       activeUsers: 0,
       color:'black'
@@ -36,8 +36,9 @@ class App extends Component {
       } else {
         const newMessage = JSON.parse(event.data);
         const messages = this.state.messages.concat(newMessage);
+        const content = newMessage.content;
 
-        console.log(newMessage.color);
+        console.log(content.endsWith('.jpg')||content.endsWith('.png')||content.endsWith('.gif'));
         this.setState({messages: messages});
       }
 
