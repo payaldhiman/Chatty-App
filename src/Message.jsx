@@ -3,34 +3,35 @@ import React, {Component} from 'react';
 class Message extends Component {
 
   render() {
-    // console.log("Rendering <Message />");
-    //console.log("on message",this.props.color);
-    console.log("on message.jsx",this.props.content);
 
     var type = this.props.type;
     var content = this.props.content;
-
-
-
-
     var message;
+
     if (type === "message") {
-      if (content.endsWith('.jpg')||content.endsWith('.png')||content.endsWith('.gif')||content.endsWith('.jpeg')) {
-        console.log("split", content.split(" "));
-        var splitcontent = content.split(" ");
-        console.log(splitcontent);
-        var url = splitcontent.slice(splitcontent.length-1);
-        console.log(url);
-        var msg = splitcontent.slice(0, splitcontent.length-1).join(" ");
-        console.log(msg);
-        //arr.split(" ") split on space, grab last element(url) - arr.slice(arr.lenght-1),s
+      if (content.match(/\.(jpeg|jpg|gif|png)/)) {
+        //split content on space
+        const parsed = content.split(/(http\S+\.jpg|png|gif|jpeg)/).map(word => {
+          if (/http\S+\.(jpg|png)/.exec(word))
+            return {type: 'img', content: word}
+          return {type: 'text', content: word};
+        });
+
+        const rendered = parsed.map((item, index) => {
+          switch(item.type){
+            case 'img':
+              return <img key={index} style={{ width: '60%' }} src={item.content} />
+            default:
+              return <div key={index}>{item.content}&nbsp;</div>
+          }
+        });
+
         message = (
           <div className="message">
             <span className="message-username" style={{color:this.props.color}}>{this.props.username}</span>
 
             <div className="message-content">
-              <span>{msg}</span>
-              <p><img src={url} /></p>
+              {rendered}
             </div>
           </div>
         )

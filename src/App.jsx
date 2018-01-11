@@ -24,10 +24,6 @@ class App extends Component {
     console.log("Connected to server");
 
     this.socket.onmessage = (event) => {
-      console.log('received message from web socket server:', event.data);
-      // Update your state
-      console.log(event.data.length);
-
 
       if (event.data.length === 1) {
         const activeUsers = event.data;
@@ -36,15 +32,13 @@ class App extends Component {
       } else {
         const newMessage = JSON.parse(event.data);
         const messages = this.state.messages.concat(newMessage);
-        const content = newMessage.content;
-
-        console.log(content.endsWith('.jpg')||content.endsWith('.png')||content.endsWith('.gif'));
         this.setState({messages: messages});
       }
 
     }
   }
 
+  //new msg
   addMessage(content) {
     const newMessage = {
       type:"message",
@@ -54,6 +48,7 @@ class App extends Component {
     this.socket.send(JSON.stringify(newMessage));
   }
 
+  //changing user name
   newUsername(user) {
 
     const newUser = {
