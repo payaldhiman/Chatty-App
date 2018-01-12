@@ -25,7 +25,7 @@ Both must be running for the app to work.
 
 ## Screenshots
 
-!["Screenshots of chatty messages"]()
+!["Screenshots of chatty messages"](https://github.com/payaldhiman/Chatty-App/blob/master/doc/chattyApp.png)
 
 ### Dependencies
 
